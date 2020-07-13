@@ -1,3 +1,4 @@
+Following code inferred schema from grid dump:
 ```
 import json
 from genson import SchemaBuilder
@@ -12,13 +13,12 @@ schema = builder.to_schema()
 with open("test_ror_schema.json",'w') as f:
   f.write(json.dumps(schema))
   ```
-
-  inferred json schema from the grid dump
-
-  added enum values for status and types
+ 
+added enum values for status and types
 
 
 `pip3 install jsonschema`
+
 `jsonschema -i test.json grid_ror_schema.json`
 
 Look at requirements: https://grid.ac/format
