@@ -21,9 +21,9 @@ added enum values for status and types
 
 `jsonschema -i test.json grid_ror_schema.json`
 
-Look at requirements: https://grid.ac/format
 
 Next steps:
 
-1. Go through formats page to look through ALL required and optional fields
-2. Write code to run validation for invalid values, invalid types, missing required fields, checking missing optional fields to see if it passes
+1. Tests will be required for the following:
+   * Check that relationship IDs exist or records for that have been created in the current dump
+
