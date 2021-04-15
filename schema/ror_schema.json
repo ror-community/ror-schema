@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
+  "additionalProperties": false,
   "properties": {
     "ip_addresses": {
       "type": "array"
@@ -25,6 +26,7 @@
     },
     "country": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "country_code": {
           "type": "string",
@@ -50,12 +52,20 @@
       "type": "array",
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "lat": {
             "type": "number"
           },
           "state_code": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "country_geonames_id": {
             "type": "integer"
@@ -64,22 +74,44 @@
             "type": "number"
           },
           "state": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "city": {
             "type": "string"
           },
           "geonames_city": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
               "nuts_level2": {
                 "type": "object",
                 "properties": {
                   "name": {
-                    "type": "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
                   },
                   "code": {
-                    "type": "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "required": [
@@ -89,18 +121,47 @@
               },
               "geonames_admin2": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
                   "ascii_name": {
-                    "type": "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
                   },
                   "id": {
-                    "type": "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ]
                   },
                   "name": {
-                    "type": "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
                   },
                   "code": {
-                    "type": "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "required": [
@@ -112,6 +173,7 @@
               },
               "geonames_admin1": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
                   "ascii_name": {
                     "type": "string"
@@ -141,12 +203,27 @@
               },
               "nuts_level1": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
                   "name": {
-                    "type": "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
                   },
                   "code": {
-                    "type": "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "required": [
@@ -156,12 +233,27 @@
               },
               "nuts_level3": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
                   "name": {
-                    "type": "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
                   },
                   "code": {
-                    "type": "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "required": [
@@ -171,6 +263,7 @@
               },
               "license": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
                   "attribution": {
                     "type": "string"
@@ -241,6 +334,7 @@
       "type": "array",
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "type": {
             "type": "string",
@@ -272,17 +366,31 @@
       "type": "object",
       "minProperties": 1,
       "patternProperties": {
-        "^[a-z0-9]+$": {
+        "^.*?$": {
           "type": "object",
           "properties": {
             "all": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "oneOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "string"
+                }
+              ]
             },
             "preferred": {
-              "type": "null"
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string"
+                }
+              ]
             }
           },
           "required": [
@@ -290,7 +398,8 @@
             "preferred"
           ]
         }
-      }
+      },
+      "additionalProperties": false
     },
     "id": {
       "type": "string",
