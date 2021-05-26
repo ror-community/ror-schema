@@ -11,7 +11,6 @@ class Validate_Tests:
         #instantiate validate class with json record
         self.__file = file
 
-
     def __file(self,file):
         return file
 
@@ -21,56 +20,65 @@ class Validate_Tests:
         m = [attribute for attribute in dir(self) if callable(getattr(self, attribute)) and attribute.startswith('__') is False and attribute.startswith('_') is False]
         return m
 
-    def __get_key(self,key):
-        # this is for a dictionary that is not nested
-        payload = self.__file.get(key,None)
-        return payload
-
-    def __recursive_nested_lookup(self,key,file=None):
-        # this is for a nested dictionary
-        # this also works for an unnested dictionary
-        if file is None:
-            file = self.__file
-        result = file.get(key)
-        if result:
-            return y
-        for k,v in file.items():
-            if isinstance(v,list):
-                for i in v:
-                    if isinstance(i,dict):
-                        return self.__recursive_nested_lookup(key,i)
-            elif isinstance(v,dict):
-                return self.__recursive_nested_lookup(key,v)
-
-    def __handle_check(self,result,name,msg):
+    def __handle_check(self,result,name,msg=None):
         # all the validator message use this pattern
         message = {}
-        message[name] = True
+        message[name] = {'result':result,'status':True}
         if msg:
             message[name] = {'result':result,'status':msg}
         return message
 
+    def __validate_url(self,url):
+        msg = None
+        validated_url = validators.url(url)
+        if validated_url:
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                msg = "Connection Error"
+        else:
+            msg = "Validation Error"
+        return msg
+
+    def check_links(self):
+        name = str(self.check_links.__name__)
+        msg = {}
+        results = True
+        links = self.__file['links']
+        links.append(self.__file['wikipedia_url'])
+        if len(links) > 0:
+            for l in links:
+                result = self.__validate_url(l)
+                if result:
+                    msg[l] = result
+                    results = None
+        if len(msg) == 0:
+            msg = None
+        return self.__handle_check(results,name,msg)
+
+
     def check_country_code(self):
         name = str(self.check_country_code.__name__)
-        country = self.__get_key('country')['country_code']
+        country = self.__file['country']['country_code']
         msg = None
         pcountry = pycountry.countries.get(alpha_2=country)
         if not(pcountry):
             msg = f'Country value: {country} is not in iso3166 standard'
-        return self.__handle_check(pcountry.alpha_2,name,msg)
+        return self.__handle_check(pcountry,name,msg)
 
     def check_language_code(self):
         name = str(self.check_language_code.__name__)
-        language = self.__get_key('labels')[0]['iso639']
+        language = self.__file['labels'][0]['iso639']
         msg = None
         pylanguage = pycountry.languages.get(alpha_2=language)
         if not(pylanguage):
             msg = f'Language value: {language} is not an iso639 standard'
-        return self.__handle_check(pylanguage.alpha_2,name,msg)
+        return self.__handle_check(pylanguage,name,msg)
 
     def check_established_year(self):
         name = str(self.check_established_year.__name__)
-        yr = self.__get_key('established')
+        yr = self.__file['established']
         msg = None
         year_length = len(str(yr))
         if not(year_length > 2 and year_length < 5):
@@ -88,8 +96,16 @@ class Validate_Tests:
         return results
 
 
-file = "/Users/eshadatta/test-grid-schema-test-files/valid/015m7wh34.json"
+#file = "/Users/eshadatta/test-grid-schema-test-files/valid/015m7wh34.json"
+file="t.json"
 with open(file, 'r') as f:
     data = json.load(f)
 validate = Validate_Tests(data)
 print(validate.validate_all())
+
+#TODO:
+# have getter functions for all the validation functions -- ??
+# finish relationship checking
+# implement geonames,
+# url checking - done
+# write tests

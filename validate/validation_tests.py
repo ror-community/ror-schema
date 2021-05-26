@@ -9,10 +9,11 @@ import pycountry
 
 ## TODO:
 # check language against iso639 - done
-# extract relationship id, language, country code, address dict - done
+# extract language, country code, address dict - done
 # zip all files, check relationship id against remaining files and against api
 # make it so that people can either check all or pick what they want to test
-# check geonames and country code - done
+# check country code - done
+# check geonames
 # check links and wikipedia_url to make sure that they are urls
 # check established is a year, between 2 and 5 digits? - done
 
