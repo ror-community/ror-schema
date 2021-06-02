@@ -3,13 +3,15 @@ import sys
 import jsonschema
 import requests
 import validators
-from utilities import *
 import pycountry
+from utilities import *
+import validation_helpers as vh
 
 class Validate_Tests:
     def __init__(self,file):
         #instantiate validate class with json record
         self.__file = file
+        vh.File = file
 
     def _validator_functions(self):
         # getting public methods for the class.
@@ -17,154 +19,76 @@ class Validate_Tests:
         m = [attribute for attribute in dir(self) if callable(getattr(self, attribute)) and attribute.startswith('_') is False]
         return m
 
-    def _handle_check(self,result,name,msg=None):
-        # all the validator message use this pattern
-        message = {}
-        message[name] = {'result':result,'status':True}
-        if not(result):
-            message[name] = {'result':result,'status':msg}
-        return message
-
-    def _validate_url(self,url):
-        msg = None
-        validated_url = validators.url(url)
-        if not(validated_url):
-            msg = "Validation Error"
-        return msg
-
-    def _mapped_geoname_record(self):
-        ror_to_geoname = {
-              "lat": "lat",
-              "lng": "lng",
-              "city": "asciiName",
-              "geonames_city": {
-                "id": "geonameId",
-                "city": "asciiName",
-                "geonames_admin1": {
-                    "name": "adminName1",
-                    "id": "adminId1",
-                    "ascii_name": "adminName1",
-                    "code": ["countryCode","adminCode1"]
-                },
-                "geonames_admin2": {
-                    "name": "adminName2",
-                    "id": "adminId2",
-                    "ascii_name": "adminName2",
-                    "code": ["countryCode","adminCode1","adminCode2"]
-                },
-                "country_geonames_id": "countryId"
-            }}
-        return ror_to_geoname
-
-    def _get_geonames_response(self,id):
-        msg = None
-        result = None
-        query_params = {}
-        query_params['geonameId'] = id
-        query_params['username'] = GEONAMES['USER']
-        url = GEONAMES['URL']
-        try:
-            response = requests.get(url,params=query_params)
-            response.raise_for_status()
-            result = json.loads(response.text)
-        except requests.exceptions.RequestException as e:
-            msg = "Connection Error"
-        return result,msg
-
-    def _get_record_address(self):
-        address = self.__file['addresses'][0]
-        id = address['geonames_city']['id']
-        return id,address
-
     def check_links(self):
+        # public method for url format validation
         name = str(self.check_links.__name__)
         msg = {}
         results = True
-        links = self.__file['links']
-        links.append(self.__file['wikipedia_url'])
+        links = vh.File['links']
+        links.append(vh.File['wikipedia_url'])
         if len(links) > 0:
             for l in links:
-                result = self._validate_url(l)
+                result = vh.validate_url(l)
                 if result:
                     msg[l] = result
                     results = None
         if len(msg) == 0:
             msg = None
-        return self._handle_check(results,name,msg)
-
-    def _compare_ror_geoname(self,mapped_fields,ror_address,geonames_response,msg={}):
-        compare = msg
-        for key, value in mapped_fields.items():
-            # If value is of dict type then print
-            # all key-value pairs in the nested dictionary
-            if isinstance(value, dict):
-                self._compare_ror_geoname(value,ror_address[key],geonames_response,compare)
-            else:
-                _,original_address = self._get_record_address()
-                ror_value = ror_address[key] if key in ror_address else original_address[key]
-                geonames_value = None
-                if (key == "code"):
-                    key_exists = True
-                    for x in value:
-                        if not(x in geonames_response):
-                            key_exists = False
-                    if key_exists:
-                        geonames_value = ".".join([geonames_response[x] for x in value])
-                else:
-                    if (value in geonames_response) and (geonames_response[value] != ""):
-                        geonames_value = geonames_response[value]
-                    if str(ror_value) != str(geonames_value):
-                        compare[key] = {"ror": ror_value, "geonames": geonames_value}
-        return compare
+        return vh.handle_check(results,name,msg)
 
     def check_address(self):
+        # compares ror and geonames address values
         name = str(self.check_address.__name__)
-        id, address = self._get_record_address()
+        id, address = vh.get_record_address()
         result = None
         compare = {}
-        geonames_response,msg = self._get_geonames_response(id)
+        geonames_response,msg = vh.get_geonames_response(id)
         if geonames_response:
-            mapped_fields = self._mapped_geoname_record()
-            compare = self._compare_ror_geoname(mapped_fields,address,geonames_response)
+            mapped_fields = vh.mapped_geoname_record()
+            compare = vh.compare_ror_geoname(mapped_fields,address,geonames_response)
             if len(compare) == 0:
                     result = True
         else:
             compare["ERROR"] = msg
-        print(compare)
-        return self._handle_check(result,name,compare)
+        return vh.handle_check(result,name,compare)
 
 
     def check_country_code(self):
+        # checks country code
         name = str(self.check_country_code.__name__)
-        country = self.__file['country']['country_code']
+        country = vh.File['country']['country_code']
         msg = None
         pcountry = pycountry.countries.get(alpha_2=country)
         if not(pcountry):
             msg = f'Country value: {country} is not in iso3166 standard'
-        return self._handle_check(pcountry,name,msg)
+        return vh.handle_check(pcountry,name,msg)
 
     def check_language_code(self):
+        # checks language code
         name = str(self.check_language_code.__name__)
-        language = self.__file['labels'][0]['iso639']
+        language = vh.File['labels'][0]['iso639']
         msg = None
         pylanguage = pycountry.languages.get(alpha_2=language)
         if not(pylanguage):
             msg = f'Language value: {language} is not an iso639 standard'
-        return self._handle_check(pylanguage,name,msg)
+        return vh.handle_check(pylanguage,name,msg)
 
     def check_established_year(self):
+        # checks established year
         name = str(self.check_established_year.__name__)
-        yr = self.__file['established']
+        yr = vh.File['established']
         msg = None
         year_length = len(str(yr))
         if not(year_length > 2 and year_length < 5):
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
-        return self._handle_check(yr,name,msg)
+        return vh.handle_check(yr,name,msg)
 
     def validate_all(self,all_files=None):
-        me = str(self.validate_all.__name__)
+        # calling all public methods in this class and removing the current method name.
+        # This enables future public methods to be called automatically as well
+        method_name = str(self.validate_all.__name__)
         validator_functions = self._validator_functions()
-        validator_functions.remove(me)
+        validator_functions.remove(method_name)
         results = []
         for methods in validator_functions:
             validate = getattr(self, methods)
