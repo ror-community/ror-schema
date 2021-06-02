@@ -11,16 +11,13 @@ class Validate_Tests:
         #instantiate validate class with json record
         self.__file = file
 
-    def __file(self,file):
-        return file
-
-    def __validator_functions(self):
+    def _validator_functions(self):
         # getting public methods for the class.
         #Do not have to hardcode functions that will be checked as all validator functions should be public
-        m = [attribute for attribute in dir(self) if callable(getattr(self, attribute)) and attribute.startswith('__') is False and attribute.startswith('_') is False]
+        m = [attribute for attribute in dir(self) if callable(getattr(self, attribute)) and attribute.startswith('_') is False]
         return m
 
-    def __handle_check(self,result,name,msg=None):
+    def _handle_check(self,result,name,msg=None):
         # all the validator message use this pattern
         message = {}
         message[name] = {'result':result,'status':True}
@@ -28,14 +25,14 @@ class Validate_Tests:
             message[name] = {'result':result,'status':msg}
         return message
 
-    def __validate_url(self,url):
+    def _validate_url(self,url):
         msg = None
         validated_url = validators.url(url)
         if not(validated_url):
             msg = "Validation Error"
         return msg
 
-    def __mapped_geoname_record(self):
+    def _mapped_geoname_record(self):
         ror_to_geoname = {
               "lat": "lat",
               "lng": "lng",
@@ -59,7 +56,7 @@ class Validate_Tests:
             }}
         return ror_to_geoname
 
-    def __get_geonames_response(self,id):
+    def _get_geonames_response(self,id):
         msg = None
         result = None
         query_params = {}
@@ -74,7 +71,7 @@ class Validate_Tests:
             msg = "Connection Error"
         return result,msg
 
-    def __get_record_address(self):
+    def _get_record_address(self):
         address = self.__file['addresses'][0]
         id = address['geonames_city']['id']
         return id,address
@@ -87,23 +84,23 @@ class Validate_Tests:
         links.append(self.__file['wikipedia_url'])
         if len(links) > 0:
             for l in links:
-                result = self.__validate_url(l)
+                result = self._validate_url(l)
                 if result:
                     msg[l] = result
                     results = None
         if len(msg) == 0:
             msg = None
-        return self.__handle_check(results,name,msg)
+        return self._handle_check(results,name,msg)
 
-    def __compare_ror_geoname(self,mapped_fields,ror_address,geonames_response,msg={}):
+    def _compare_ror_geoname(self,mapped_fields,ror_address,geonames_response,msg={}):
         compare = msg
         for key, value in mapped_fields.items():
             # If value is of dict type then print
             # all key-value pairs in the nested dictionary
             if isinstance(value, dict):
-                self.__compare_ror_geoname(value,ror_address[key],geonames_response,compare)
+                self._compare_ror_geoname(value,ror_address[key],geonames_response,compare)
             else:
-                _,original_address = self.__get_record_address()
+                _,original_address = self._get_record_address()
                 ror_value = ror_address[key] if key in ror_address else original_address[key]
                 geonames_value = None
                 if (key == "code"):
@@ -122,19 +119,19 @@ class Validate_Tests:
 
     def check_address(self):
         name = str(self.check_address.__name__)
-        id, address = self.__get_record_address()
+        id, address = self._get_record_address()
         result = None
         compare = {}
-        geonames_response,msg = self.__get_geonames_response(id)
+        geonames_response,msg = self._get_geonames_response(id)
         if geonames_response:
-            mapped_fields = self.__mapped_geoname_record()
-            compare = self.__compare_ror_geoname(mapped_fields,address,geonames_response)
+            mapped_fields = self._mapped_geoname_record()
+            compare = self._compare_ror_geoname(mapped_fields,address,geonames_response)
             if len(compare) == 0:
                     result = True
         else:
             compare["ERROR"] = msg
         print(compare)
-        return self.__handle_check(result,name,compare)
+        return self._handle_check(result,name,compare)
 
 
     def check_country_code(self):
@@ -144,7 +141,7 @@ class Validate_Tests:
         pcountry = pycountry.countries.get(alpha_2=country)
         if not(pcountry):
             msg = f'Country value: {country} is not in iso3166 standard'
-        return self.__handle_check(pcountry,name,msg)
+        return self._handle_check(pcountry,name,msg)
 
     def check_language_code(self):
         name = str(self.check_language_code.__name__)
@@ -153,7 +150,7 @@ class Validate_Tests:
         pylanguage = pycountry.languages.get(alpha_2=language)
         if not(pylanguage):
             msg = f'Language value: {language} is not an iso639 standard'
-        return self.__handle_check(pylanguage,name,msg)
+        return self._handle_check(pylanguage,name,msg)
 
     def check_established_year(self):
         name = str(self.check_established_year.__name__)
@@ -162,11 +159,11 @@ class Validate_Tests:
         year_length = len(str(yr))
         if not(year_length > 2 and year_length < 5):
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
-        return self.__handle_check(yr,name,msg)
+        return self._handle_check(yr,name,msg)
 
     def validate_all(self,all_files=None):
         me = str(self.validate_all.__name__)
-        validator_functions = self.__validator_functions()
+        validator_functions = self._validator_functions()
         validator_functions.remove(me)
         results = []
         for methods in validator_functions:
