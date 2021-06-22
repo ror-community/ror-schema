@@ -72,6 +72,10 @@ def get_record_address():
     id = address['geonames_city']['id']
     return id,address
 
+def get_relationship_info():
+    # returns relationship dictionary
+    return {"id": File['id'], "name": File['name'],"rel": File["relationships"]}
+
 def compare_ror_geoname(mapped_fields,ror_address,geonames_response,msg={}):
     # using the ror json, geonames response, and mapping dictionary; compares geonames and ror values and adds unequal values to a dictionary
     compare = msg

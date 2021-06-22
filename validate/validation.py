@@ -6,11 +6,11 @@ import validators
 import pycountry
 from utilities import *
 import validation_helpers as vh
+import validate_relationships as vr
 
 class Validate_Tests:
     def __init__(self,file):
         #instantiate validate class with json record
-        self.__file = file
         vh.File = file
 
     def _validator_functions(self):
@@ -83,7 +83,7 @@ class Validate_Tests:
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
         return vh.handle_check(yr,name,msg)
 
-    def validate_all(self,all_files=None):
+    def validate_all(self,file_path=None):
         # calling all public methods in this class and removing the current method name.
         # This enables future public methods to be called automatically as well
         method_name = str(self.validate_all.__name__)
@@ -93,19 +93,21 @@ class Validate_Tests:
         for methods in validator_functions:
             validate = getattr(self, methods)
             results.append(validate())
+        if file_path:
+            rel = vh.get_relationship_info()
+            if rel['rel']:
+                vr.info(rel)
         return results
 
 
 #file = "/Users/eshadatta/test-grid-schema-test-files/valid/015m7wh34.json"
 file="t.json"
+path="/Users/eshadatta/test-grid-schema-test-files/valid"
 with open(file, 'r') as f:
     data = json.load(f)
 validate = Validate_Tests(data)
-print(validate.validate_all())
+print(validate.validate_all(file_path=path))
 
 #TODO:
-# have getter functions for all the validation functions -- ??
 # finish relationship checking
-# implement geonames - done,
-# url checking - done
 # write tests
