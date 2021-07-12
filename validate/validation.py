@@ -23,7 +23,6 @@ class Validate_Tests:
         # public method for url format validation
         name = str(self.check_links.__name__)
         msg = {}
-        results = True
         links = vh.File['links']
         links.append(vh.File['wikipedia_url'])
         if len(links) > 0:
@@ -31,10 +30,9 @@ class Validate_Tests:
                 result = vh.validate_url(l)
                 if result:
                     msg[l] = result
-                    results = None
         if len(msg) == 0:
             msg = None
-        return vh.handle_check(results,name,msg)
+        return vh.handle_check(name,msg)
 
     def check_address(self):
         # compares ror and geonames address values
@@ -50,7 +48,7 @@ class Validate_Tests:
                     result = True
         else:
             compare["ERROR"] = msg
-        return vh.handle_check(result,name,compare)
+        return vh.handle_check(name,compare)
 
 
     def check_country_code(self):
@@ -61,7 +59,7 @@ class Validate_Tests:
         pcountry = pycountry.countries.get(alpha_2=country)
         if not(pcountry):
             msg = f'Country value: {country} is not in iso3166 standard'
-        return vh.handle_check(pcountry,name,msg)
+        return vh.handle_check(name,msg)
 
     def check_language_code(self):
         # checks language code
@@ -71,7 +69,7 @@ class Validate_Tests:
         pylanguage = pycountry.languages.get(alpha_2=language)
         if not(pylanguage):
             msg = f'Language value: {language} is not an iso639 standard'
-        return vh.handle_check(pylanguage,name,msg)
+        return vh.handle_check(name,msg)
 
     def check_established_year(self):
         # checks established year
@@ -81,7 +79,7 @@ class Validate_Tests:
         year_length = len(str(yr))
         if not(year_length > 2 and year_length < 5):
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
-        return vh.handle_check(yr,name,msg)
+        return vh.handle_check(name,msg)
 
     def validate_all(self,file_path=None):
         # calling all public methods in this class and removing the current method name.
@@ -96,13 +94,17 @@ class Validate_Tests:
         if file_path:
             rel = vh.get_relationship_info()
             if rel['rel']:
-                vr.info(rel)
+                vr.info = {"file_path":file_path,"record_info":rel}
+                msg = vr.check_relationships()
+                if msg:
+                    results.append({'relationships':msg})
+        results = list(filter(None,results))
         return results
 
 
 #file = "/Users/eshadatta/test-grid-schema-test-files/valid/015m7wh34.json"
 file="t.json"
-path="/Users/eshadatta/test-grid-schema-test-files/valid"
+path="test_all"
 with open(file, 'r') as f:
     data = json.load(f)
 validate = Validate_Tests(data)

@@ -13,7 +13,7 @@ import pycountry
 # zip all files, check relationship id against remaining files and against api
 # make it so that people can either check all or pick what they want to test
 # check country code - done
-# check geonames
+# check geonames - done
 # check links and wikipedia_url to make sure that they are urls
 # check established is a year, between 2 and 5 digits? - done
 

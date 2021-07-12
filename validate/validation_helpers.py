@@ -9,12 +9,11 @@ import pycountry
 
 File = None
 
-def handle_check(result,name,msg=None):
+def handle_check(name,msg=None):
     # all the validator message use this pattern
     message = {}
-    message[name] = {'result':result,'status':True}
-    if not(result):
-        message[name] = {'result':result,'status':msg}
+    if msg:
+        message[name] = {'status':msg}
     return message
 
 def validate_url(url):
@@ -100,5 +99,7 @@ def compare_ror_geoname(mapped_fields,ror_address,geonames_response,msg={}):
                     if (value in geonames_response) and (geonames_response[value] != ""):
                         geonames_value = geonames_response[value]
                     if str(ror_value) != str(geonames_value):
+                        print(f"ror: {ror_value}")
+                        print(f"geonames: {geonames_value}")
                         compare[key] = {"ror": ror_value, "geonames": geonames_value}
         return compare
