@@ -103,8 +103,9 @@ class Validate_Tests:
 
 
 #file = "/Users/eshadatta/test-grid-schema-test-files/valid/015m7wh34.json"
-file="t.json"
-path="test_all"
+file="t1.json"
+#path="test_all"
+path=None
 with open(file, 'r') as f:
     data = json.load(f)
 validate = Validate_Tests(data)

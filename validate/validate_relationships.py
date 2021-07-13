@@ -8,12 +8,6 @@ from utilities import *
 info = {"file_path": None, "record_info": None}
 errors = []
 
-# created a set of test files with the t.json rels in test_all. The bad ones are in the one called bad_files, so that we know which are invalid
-# made a few invalid
-# go through relationships in file being checked
-# check if files exist in the path or if not check the ror response to see if that relationship exists
-# take relationship function out of related records
-# use log instead of print?
 def rel_pair_validator(label):
     p = "Parent"
     c = "Child"

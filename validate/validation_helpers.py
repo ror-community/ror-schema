@@ -76,7 +76,6 @@ def get_relationship_info():
     return {"id": File['id'], "name": File['name'],"rel": File["relationships"]}
 
 def compare_ror_geoname(mapped_fields,ror_address,geonames_response,msg={}):
-    # using the ror json, geonames response, and mapping dictionary; compares geonames and ror values and adds unequal values to a dictionary
     compare = msg
     for key, value in mapped_fields.items():
         # If value is of dict type then print
@@ -84,7 +83,6 @@ def compare_ror_geoname(mapped_fields,ror_address,geonames_response,msg={}):
         if isinstance(value, dict):
             compare_ror_geoname(value,ror_address[key],geonames_response,compare)
         else:
-            # sometimes the key is in the original ror dictionary.
             _,original_address = get_record_address()
             ror_value = ror_address[key] if key in ror_address else original_address[key]
             geonames_value = None
@@ -95,11 +93,9 @@ def compare_ror_geoname(mapped_fields,ror_address,geonames_response,msg={}):
                         key_exists = False
                 if key_exists:
                     geonames_value = ".".join([geonames_response[x] for x in value])
-                else:
-                    if (value in geonames_response) and (geonames_response[value] != ""):
-                        geonames_value = geonames_response[value]
-                    if str(ror_value) != str(geonames_value):
-                        print(f"ror: {ror_value}")
-                        print(f"geonames: {geonames_value}")
-                        compare[key] = {"ror": ror_value, "geonames": geonames_value}
-        return compare
+            else:
+                if (value in geonames_response) and (geonames_response[value] != ""):
+                    geonames_value = geonames_response[value]
+            if str(ror_value) != str(geonames_value):
+                compare[key] = {"ror": ror_value, "geonames": geonames_value}
+    return compare
