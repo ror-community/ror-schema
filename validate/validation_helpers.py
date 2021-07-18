@@ -3,7 +3,7 @@ import sys
 import jsonschema
 import requests
 import validators
-from utilities import *
+from validate.utilities import *
 import pycountry
 
 

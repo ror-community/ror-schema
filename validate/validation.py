@@ -4,9 +4,9 @@ import jsonschema
 import requests
 import validators
 import pycountry
-from utilities import *
-import validation_helpers as vh
-import validate_relationships as vr
+import validate.utilities as u
+import validate.validation_helpers as vh
+import validate.validate_relationships as vr
 
 class Validate_Tests:
     def __init__(self,file):
@@ -102,14 +102,13 @@ class Validate_Tests:
         return results
 
 
-file = "/Users/eshadatta/test-grid-schema-test-files/valid/015m7wh34.json"
-#file="t1.json"
-path="test_all"
-with open(file, 'r') as f:
-    data = json.load(f)
-validate = Validate_Tests(data)
-print(validate.validate_all(file_path=path))
+#file = "/Users/eshadatta/test-grid-schema-test-files/valid/015m7wh34.json"
 
-#TODO:
-# finish relationship checking
+#path="test_all"
+#with open(file, 'r') as f:
+    #data = json.load(f)
+#validate = Validate_Tests(data)
+#print(validate.validate_all(file_path=path))
+
+
 # write tests

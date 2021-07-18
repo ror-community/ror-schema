@@ -3,7 +3,7 @@ import sys
 import jsonschema
 from jsonschema import validate
 import validators
-from utilities import *
+from validate.utilities import *
 
 def schema_type(schema):
     if url_validation(schema):
@@ -27,21 +27,3 @@ def validate_file(file,schema):
         msg[file] = err
     valid = False if msg else True
     return valid, msg
-
-def main():
-    args = sys.argv[1:]
-    if (len(args) == 0):
-        help()
-        exit(0)
-    file = args[0]
-    schema = args[1] if len(args) > 1 else None
-    valid, msg = validate_file(file,schema)
-    if valid:
-        exit(0)
-    else:
-        for file, err in msg.items():
-            sys.stderr.write(f"\nERROR: {file}: {err}\n")
-        exit(1)
-
-if __name__ == "__main__":
-    main()
