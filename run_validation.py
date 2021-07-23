@@ -30,8 +30,11 @@ def get_files(file,dir):
     if file:
         files.append(file)
     elif dir:
+        file = []
+        path = os.path.normpath(dir)
         for f in os.listdir(dir):
-            files.append(f)
+            file.append(f)
+        files = list(map(lambda x: path+"/"+x, file))
     return files
 
 def main():
@@ -42,22 +45,22 @@ def main():
     filename = ""
     messages = {}
     validation_errors = {}
-    validation_errors = {}
     for f in files:
         filename = os.path.basename(f).split(".")[0]
-        messages[filename] = []
+        print("fn: ", filename)
+
         valid, msg = vs.validate_file(f,schema)
         if valid:
             errors = run_validation_tests(f,path)
+            print(f"file: {f}, errors: {errors}")
             messages[filename] = errors
         else:
             for file, err in msg.items():
-                messages[filename].append(err)
+                messages[filename] = err
     for filename, err in messages.items():
         if len(err) > 0:
             for errors in err:
-                sys.stderr.write(f"ERROR: {filename}: {errors}\n")
-        exit(1)
+                print(f"ERROR: {filename}: {errors}\n")
 
 if __name__ == "__main__":
     main()

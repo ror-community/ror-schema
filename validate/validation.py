@@ -25,6 +25,8 @@ class Validate_Tests:
         msg = {}
         links = vh.File['links']
         links.append(vh.File['wikipedia_url'])
+        # removing empty strings
+        links = list(filter(None, links))
         if len(links) > 0:
             for l in links:
                 result = vh.validate_url(l)
@@ -64,11 +66,12 @@ class Validate_Tests:
     def check_language_code(self):
         # checks language code
         name = str(self.check_language_code.__name__)
-        language = vh.File['labels'][0]['iso639']
+        language = vh.File['labels']
         msg = None
-        pylanguage = pycountry.languages.get(alpha_2=language)
-        if not(pylanguage):
-            msg = f'Language value: {language} is not an iso639 standard'
+        if len(language) > 0:
+            pylanguage = pycountry.languages.get(alpha_2=language[0]['iso639'])
+            if not(pylanguage):
+                msg = f'Language value: {language} is not an iso639 standard'
         return vh.handle_check(name,msg)
 
     def check_established_year(self):
@@ -76,8 +79,8 @@ class Validate_Tests:
         name = str(self.check_established_year.__name__)
         yr = vh.File['established']
         msg = None
-        year_length = len(str(yr))
-        if not(year_length > 2 and year_length < 5):
+        year_length = len(str(yr)) if isinstance(yr, int) else None
+        if year_length and (not(year_length > 2 and year_length < 5)):
             msg = f'Year value: {yr} should be an integer between 3 and 4 digits'
         return vh.handle_check(name,msg)
 
@@ -100,15 +103,5 @@ class Validate_Tests:
                     results.append({'relationships':msg})
         results = list(filter(None,results))
         return results
-
-
-#file = "/Users/eshadatta/test-grid-schema-test-files/valid/015m7wh34.json"
-
-#path="test_all"
-#with open(file, 'r') as f:
-    #data = json.load(f)
-#validate = Validate_Tests(data)
-#print(validate.validate_all(file_path=path))
-
 
 # write tests
