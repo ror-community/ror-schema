@@ -41,26 +41,32 @@ def main():
     args = set_args()
     files = get_files(args.file,args.dir)
     schema = args.schema if args.schema else None
-    path = args.file_path if args.file_path else None
+    path = os.path.normpath(args.file_path) if args.file_path else None
     filename = ""
-    messages = {}
-    validation_errors = {}
+    validation_errors = False
     for f in files:
         filename = os.path.basename(f).split(".")[0]
-        print("fn: ", filename)
-
         valid, msg = vs.validate_file(f,schema)
         if valid:
             errors = run_validation_tests(f,path)
-            print(f"file: {f}, errors: {errors}")
-            messages[filename] = errors
+            if len(errors) > 0:
+                validation_errors = True
+                print("VALIDATION TEST ERRORS: \n")
+                print(f"File: {filename}: \n")
+                for e in errors:
+                    for loc, msg in e.items():
+                        print(f"In {loc}: {msg}")
         else:
+            validation_errors = True
+            print("VALIDATION TEST ERRORS: \n")
             for file, err in msg.items():
-                messages[filename] = err
-    for filename, err in messages.items():
-        if len(err) > 0:
-            for errors in err:
-                print(f"ERROR: {filename}: {errors}\n")
+                print(f"File: {file}: \n")
+                print(err)
+
+    if validation_errors:
+        exit(1)
+    else:
+        exit(0)
 
 if __name__ == "__main__":
     main()
