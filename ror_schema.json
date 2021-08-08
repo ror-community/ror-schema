@@ -30,8 +30,8 @@
       "properties": {
         "country_code": {
           "type": "string",
-          "minLength": 2,
-          "maxLength": 2
+          "minLength": 3,
+          "maxLength": 3
         },
         "country_name": {
           "type": "string"
