@@ -425,7 +425,10 @@
       }
     },
     "status": {
-      "type": "string"
+      "type": "string",
+      "enum": [
+        "active"
+      ]
     }
   },
   "definitions": {
