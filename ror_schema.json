@@ -4,22 +4,26 @@
   "additionalProperties": false,
   "properties": {
     "ip_addresses": {
-      "type": "array"
+      "type": "array",
+      "default": []
     },
     "aliases": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "default": []
     },
     "acronyms": {
       "type": "array",
+      "default": [],
       "items": {
         "type": "string"
       }
     },
     "links": {
       "type": "array",
+      "default": [],
       "items": {
         "type": "string"
       }
@@ -31,144 +35,69 @@
         "country_code": {
           "type": "string",
           "minLength": 2,
-          "maxLength": 2
+          "maxLength": 2,
+          "readOnly": true
         },
         "country_name": {
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         }
       },
-      "required": [
-        "country_code",
-        "country_name"
-      ]
+      "required": ["country_code", "country_name"]
     },
     "name": {
       "$ref": "#/definitions/non-empty-string"
     },
     "wikipedia_url": {
-      "type": "string"
+      "type": ["null","string"],
+      "default": null
+
     },
     "addresses": {
       "type": "array",
+      "maxItems": 1,
+      "minItems": 1,
       "items": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "geonames_city"
+        ],
         "properties": {
-          "lat": {
-            "type": "number"
-          },
-          "state_code": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "country_geonames_id": {
-            "type": "integer"
-          },
-          "lng": {
-            "type": "number"
-          },
-          "state": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "city": {
-            "type": "string"
-          },
           "geonames_city": {
             "type": "object",
             "additionalProperties": false,
+            "required": [
+              "id"
+            ],
             "properties": {
-              "nuts_level2": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "code": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  }
-                },
-                "required": [
-                  "code",
-                  "name"
-                ]
+              "id": {
+                "title": "Location ID",
+                "type": "integer"
               },
-              "geonames_admin2": {
+              "city": {
+                "type": "string",
+                "readOnly": true
+              },
+              "license": {
                 "type": "object",
                 "additionalProperties": false,
+                "default": {},
                 "properties": {
-                  "ascii_name": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
+                  "attribution": {
+                    "readOnly": true,
+                    "type": "string",
+                    "default": "Data from geonames.org under a CC-BY 3.0 license"
                   },
-                  "id": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
-                        "type": "integer"
-                      }
-                    ]
-                  },
-                  "name": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "code": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
+                  "license": {
+                    "type": "string",
+                    "readOnly": true,
+                    "default": "http://creativecommons.org/licenses/by/3.0/"
                   }
                 },
                 "required": [
-                  "ascii_name",
-                  "code",
-                  "id",
-                  "name"
+                  "attribution",
+                  "license"
                 ]
               },
               "geonames_admin1": {
@@ -176,54 +105,90 @@
                 "additionalProperties": false,
                 "properties": {
                   "ascii_name": {
-                    "type": "string"
-                  },
-                  "id": {
-                    "type": "integer"
+                    "readOnly": true,
+                    "type": "string",
+                    "default": null
                   },
                   "name": {
-                    "type": "string"
+                    "readOnly": true,
+                    "type": "string",
+                    "default": null
+                  },
+                  "id": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "default": null
                   },
                   "code": {
-                    "type": "string"
+                    "readOnly": true,
+                    "type": "string",
+                    "default": null
                   }
-                },
-                "required": [
-                  "ascii_name",
-                  "code",
-                  "id",
-                  "name"
-                ]
+                }
               },
-              "city": {
-                "type": "string"
-              },
-              "id": {
-                "type": "integer"
+              "geonames_admin2": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "ascii_name": {
+                    "readOnly": true,
+                    "type": ["string","null"]
+                  },
+                  "name": {
+                    "readOnly": true,
+                    "type": ["string","null"]
+                  },
+                  "id": {
+                    "type": ["integer","null"],
+                    "readOnly": true
+                  },
+                  "code": {
+                    "readOnly": true,
+                    "type": ["string","null"]
+                  }
+                }
               },
               "nuts_level1": {
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
                   "name": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "default": null
                   },
                   "code": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "default": null
+                  }
+                },
+                "required": [
+                  "code",
+                  "name"
+                ]
+              },
+              "nuts_level2": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "default": null
+                  },
+                  "code": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "default": null
                   }
                 },
                 "required": [
@@ -236,76 +201,83 @@
                 "additionalProperties": false,
                 "properties": {
                   "name": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "default": null
                   },
                   "code": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "default": null
                   }
                 },
                 "required": [
                   "code",
                   "name"
                 ]
-              },
-              "license": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "attribution": {
-                    "type": "string"
-                  },
-                  "license": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "attribution",
-                  "license"
-                ]
               }
-            },
-            "required": [
-              "city",
-              "geonames_admin1",
-              "id",
-              "license"
-            ]
+            }
           },
-          "postcode": {
-            "type": "null"
+          "lat": {
+            "type": "number",
+            "readOnly": true
+          },
+          "lng": {
+            "type": "number",
+            "readOnly": true
+          },
+          "city": {
+            "type": "string",
+            "readOnly": true
+          },
+          "state_code": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "readOnly": true,
+            "default": null
+          },
+          "state": {
+            "readOnly": true,
+            "type": [
+              "null",
+              "string"
+            ],
+            "default": null
+          },
+          "country_geonames_id": {
+            "type": "integer",
+            "readOnly": true
           },
           "primary": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": false
+          },
+          "postcode": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "default": null
           },
           "line": {
-            "type": "null"
+            "type": [
+              "null",
+              "string"
+            ],
+            "default": null
           }
-        },
-        "required": [
-          "city",
-          "country_geonames_id",
-          "geonames_city",
-          "lat",
-          "lng"
-        ]
+        }
       }
     },
     "types": {
       "type": "array",
+      "description": "Institutional Types",
       "items": {
         "type": "string",
         "enum": [
@@ -320,29 +292,108 @@
         ]
       }
     },
-    "established": {
-      "oneOf": [
-        {
-          "type": "null"
+    "external_ids": {
+      "type": "object",
+      "default": {},
+      "additionalProperties": true,
+      "title": "External IDs",
+      "properties": {
+        "GRID": {
+          "type": "object",
+          "title": "GRID",
+          "additionalProperties": false,
+          "properties": {
+            "preferred": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "all": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
         },
-        {
-          "type": "integer"
+        "ISNI": {
+          "type": "object",
+          "title": "ISNI",
+          "additionalProperties": false,
+          "properties": {
+            "preferred": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "all": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "FundRef": {
+          "type": "object",
+          "title": "FunderRef",
+          "additionalProperties": false,
+          "properties": {
+            "preferred": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "all": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Wikidata": {
+          "type": "object",
+          "title": "Wikidata",
+          "additionalProperties": false,
+          "properties": {
+            "preferred": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            },
+            "all": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         }
-      ]
+      }
+    },
+    "established": {
+      "type": ["null", "number"],
+      "default": null
     },
     "relationships": {
       "type": "array",
+      "default": [],
       "items": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "Related",
-              "Parent",
-              "Child"
-            ]
+            "enum": ["Related", "Parent", "Child"]
           },
           "id": {
             "type": "string",
@@ -352,62 +403,24 @@
             "$ref": "#/definitions/non-empty-string"
           }
         },
-        "required": [
-          "id",
-          "label",
-          "type"
-        ]
+        "required": ["id", "label", "type"]
       }
     },
     "email_address": {
-      "type": "null"
-    },
-    "external_ids": {
-      "type": "object",
-      "minProperties": 1,
-      "patternProperties": {
-        "^.*?$": {
-          "type": "object",
-          "properties": {
-            "all": {
-              "oneOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                {
-                  "type": "string"
-                }
-              ]
-            },
-            "preferred": {
-              "oneOf": [
-                {
-                  "type": "null"
-                },
-                {
-                  "type": "string"
-                }
-              ]
-            }
-          },
-          "required": [
-            "all",
-            "preferred"
-          ]
-        }
-      },
-      "additionalProperties": false
+      "type": ["null", "string"],
+      "default": null
     },
     "id": {
       "type": "string",
-      "pattern": "^https://ror.org/0[a-z|0-9]{8}$"
+      "pattern": "^https://ror.org/0[a-z|0-9]{8}$",
+      "readOnly": true,
+      "default": "https://ror.org/012xzy7a9"
     },
     "labels": {
       "type": "array",
+      "default": [],
       "items": {
+        "type": "object",
         "properties": {
           "label": {
             "type": "string"
@@ -418,17 +431,14 @@
             "maxLength": 2
           }
         },
-        "required": [
-          "label",
-          "iso639"
-        ]
+        "required": ["label", "iso639"]
       }
     },
     "status": {
       "type": "string",
-      "enum": [
-        "active"
-      ]
+      "enum": ["active"],
+      "readOnly": true,
+      "default": "active"
     }
   },
   "definitions": {
@@ -437,20 +447,5 @@
       "minLength": 1
     }
   },
-  "required": [
-    "acronyms",
-    "addresses",
-    "aliases",
-    "country",
-    "established",
-    "external_ids",
-    "id",
-    "labels",
-    "links",
-    "name",
-    "relationships",
-    "status",
-    "types",
-    "wikipedia_url"
-  ]
+  "required": ["name", "types", "addresses"]
 }
