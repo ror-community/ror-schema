@@ -106,22 +106,22 @@
                 "properties": {
                   "ascii_name": {
                     "readOnly": true,
-                    "type": "string",
+                    "type": ["string","null"],
                     "default": null
                   },
                   "name": {
                     "readOnly": true,
-                    "type": "string",
+                    "type": ["string","null"],
                     "default": null
                   },
                   "id": {
-                    "type": "integer",
                     "readOnly": true,
+                    "type": ["integer","null"],
                     "default": null
                   },
                   "code": {
                     "readOnly": true,
-                    "type": "string",
+                    "type": ["string","null"],
                     "default": null
                   }
                 }
@@ -132,19 +132,23 @@
                 "properties": {
                   "ascii_name": {
                     "readOnly": true,
-                    "type": ["string","null"]
+                    "type": ["string","null"],
+                    "default": null
                   },
                   "name": {
                     "readOnly": true,
-                    "type": ["string","null"]
+                    "type": ["string","null"],
+                    "default": null
                   },
                   "id": {
+                    "readOnly": true,
                     "type": ["integer","null"],
-                    "readOnly": true
+                    "default": null
                   },
                   "code": {
                     "readOnly": true,
-                    "type": ["string","null"]
+                    "type": ["string","null"],
+                    "default": null
                   }
                 }
               },
