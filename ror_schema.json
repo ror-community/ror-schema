@@ -9,10 +9,10 @@
     },
     "aliases": {
       "type": "array",
+      "default": [],
       "items": {
         "type": "string"
-      },
-      "default": []
+      }
     },
     "acronyms": {
       "type": "array",
@@ -30,6 +30,7 @@
     },
     "country": {
       "type": "object",
+      "default": {},
       "additionalProperties": false,
       "properties": {
         "country_code": {
@@ -46,7 +47,8 @@
       "required": ["country_code", "country_name"]
     },
     "name": {
-      "$ref": "#/definitions/non-empty-string"
+      "$ref": "#/definitions/non-empty-string",
+      "default": ""
     },
     "wikipedia_url": {
       "type": ["null","string"],
@@ -55,6 +57,7 @@
     },
     "addresses": {
       "type": "array",
+      "default": [],
       "maxItems": 1,
       "minItems": 1,
       "items": {
@@ -281,6 +284,7 @@
     },
     "types": {
       "type": "array",
+      "default": [],
       "description": "Institutional Types",
       "items": {
         "type": "string",
@@ -416,9 +420,9 @@
     },
     "id": {
       "type": "string",
+      "default": "https://ror.org/012xzy7a9",
       "pattern": "^https://ror.org/0[a-z|0-9]{8}$",
-      "readOnly": true,
-      "default": "https://ror.org/012xzy7a9"
+      "readOnly": true
     },
     "labels": {
       "type": "array",
@@ -440,9 +444,8 @@
     },
     "status": {
       "type": "string",
-      "enum": ["active", "inactive", "withdrawn"],
-      "readOnly": true,
       "default": "active"
+      "enum": ["active", "inactive", "withdrawn"]
     }
   },
   "definitions": {
@@ -451,5 +454,5 @@
       "minLength": 1
     }
   },
-  "required": ["name", "types", "addresses"]
+  "required": ["name", "types", "addresses", "status"]
 }
