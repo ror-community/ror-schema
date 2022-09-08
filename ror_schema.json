@@ -444,7 +444,7 @@
     },
     "status": {
       "type": "string",
-      "default": "active"
+      "default": "active",
       "enum": ["active", "inactive", "withdrawn"]
     }
   },
