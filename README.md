@@ -18,7 +18,6 @@ In the context of ROR curation, ror_schema.json is used:
 - As part of the [validation-suite](https://github.com/ror-community/validation-suite), which is used to validate new and updated records as part of the ROR curation workflow. This suite uses jsonschema to validate records against ror-schema.json, and also performs additional steps, such as checking Geonames addresses information against the Geonames API and checking for reciprical relationships. This suite is run at several points in the curation workflow using Github actions in [ror-updates](https://github.com/ror-community/ror-updates/tree/master/.github/workflows) and [ror-records](https://github.com/ror-community/ror-records/tree/main/.github/workflows).
 
 
+## Definitions and policies
 
-
-
-
+For documentation of top-level metadata element definitions and policies, see [ROR Data Structure](https://ror.readme.io/docs/ror-data-structure). For additional documentation of child-level fields, see also the longer [list of fields and subfields](https://ror.readme.io/docs/advanced-search#available-fields) in the ROR record schema that can be searched using the API advanced search. 
