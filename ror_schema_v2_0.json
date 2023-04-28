@@ -60,7 +60,7 @@
             "type": "array",
             "default": [],
             "items": {
-                "$ref": "#/definitions/non-empty-string"
+                "$ref": "#/$defs/non-empty-string"
             }
         },
         "links": {
@@ -96,7 +96,8 @@
                 "type": "object",
                 "additionalProperties": false,
                 "required": [
-                    "geonames_id, geonames_details"
+                    "geonames_id",
+                    "geonames_details"
                 ],
                 "properties": {
                     "geonames_id": {
@@ -110,7 +111,7 @@
                         ],
                         "properties": {
                             "name": {
-                                "$ref": "#/definitions/non-empty-string"
+                                "$ref": "#/$defs/non-empty-string"
                             },
                             "lat": {
                                 "type": [
@@ -172,7 +173,7 @@
                         "type": "array",
                         "default": [],
                         "items": {
-                            "$ref": "#/definitions/non-empty-string"
+                            "$ref": "#/$defs/non-empty-string"
                         }
                     },
                     "type": {
@@ -226,7 +227,7 @@
                         "pattern": "^https://ror.org/0[a-z|0-9]{8}$"
                     },
                     "label": {
-                        "$ref": "#/definitions/non-empty-string"
+                        "$ref": "#/$defs/non-empty-string"
                     }
                 },
                 "required": [
@@ -251,18 +252,21 @@
                 "additionalProperties": false,
                 "properties": {
                     "value": {
-                        "$ref": "#/definitions/non-empty-string"
+                        "$ref": "#/$defs/non-empty-string"
                     },
                     "types": {
                         "type": "array",
                         "default": [],
                         "minItems": 1,
-                        "enum": [
-                            "acronym",
-                            "alias",
-                            "label",
-                            "ror_display"
-                        ]
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "acronym",
+                                "alias",
+                                "label",
+                                "ror_display"
+                            ]
+                        }
                     },
                     "lang": {
                         "type": "string",
@@ -286,7 +290,7 @@
             ]
         }
     },
-    "definitions": {
+    "$defs": {
         "non-empty-string": {
             "type": "string",
             "minLength": 1
