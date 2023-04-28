@@ -1,0 +1,302 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "admin": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "created": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "date": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "schema_version": {
+                            "type": "string",
+                            "enum": [
+                                "1.0",
+                                "2.0"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "date",
+                        "schema_version"
+                    ]
+                },
+                "last_modified": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "date": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "schema_version": {
+                            "type": "string",
+                            "enum": [
+                                "1.0",
+                                "2.0"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "date",
+                        "schema_version"
+                    ]
+                }
+            },
+            "required": [
+                "created",
+                "last_modified"
+            ]
+        },
+        "domains": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "$ref": "#/definitions/non-empty-string"
+            }
+        },
+        "links": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "value": {
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "website",
+                            "wikipedia"
+                        ]
+                    }
+                },
+                "required": [
+                    "type",
+                    "value"
+                ]
+            }
+        },
+        "locations": {
+            "type": "array",
+            "default": [],
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "geonames_id, geonames_details"
+                ],
+                "properties": {
+                    "geonames_id": {
+                        "type": "integer"
+                    },
+                    "geonames_details": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "name"
+                        ],
+                        "properties": {
+                            "name": {
+                                "$ref": "#/definitions/non-empty-string"
+                            },
+                            "lat": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            },
+                            "lng": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            },
+                            "country_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "minLength": 2,
+                                "maxLength": 2
+                            },
+                            "country_name": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "types": {
+            "type": "array",
+            "minItems": 1,
+            "default": [],
+            "items": {
+                "type": "string",
+                "enum": [
+                    "education",
+                    "healthcare",
+                    "company",
+                    "archive",
+                    "nonprofit",
+                    "government",
+                    "facility",
+                    "other"
+                ]
+            }
+        },
+        "external_ids": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "all": {
+                        "type": "array",
+                        "default": [],
+                        "items": {
+                            "$ref": "#/definitions/non-empty-string"
+                        }
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "fundref",
+                            "grid",
+                            "isni",
+                            "wikidata"
+                        ]
+                    },
+                    "preferred": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "all",
+                    "type"
+                ]
+            }
+        },
+        "established": {
+            "type": [
+                "null",
+                "number"
+            ],
+            "default": null
+        },
+        "relationships": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "related",
+                            "parent",
+                            "child",
+                            "successor",
+                            "predecessor"
+                        ]
+                    },
+                    "id": {
+                        "type": "string",
+                        "pattern": "^https://ror.org/0[a-z|0-9]{8}$"
+                    },
+                    "label": {
+                        "$ref": "#/definitions/non-empty-string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "label",
+                    "type"
+                ]
+            }
+        },
+        "id": {
+            "type": "string",
+            "default": "https://ror.org/012xzy7a9",
+            "pattern": "^https://ror.org/0[a-z|0-9]{8}$",
+            "readOnly": true
+        },
+        "names": {
+            "type": "array",
+            "default": [],
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "value": {
+                        "$ref": "#/definitions/non-empty-string"
+                    },
+                    "types": {
+                        "type": "array",
+                        "default": [],
+                        "minItems": 1,
+                        "enum": [
+                            "acronym",
+                            "alias",
+                            "label",
+                            "ror_display"
+                        ]
+                    },
+                    "lang": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 2
+                    }
+                },
+                "required": [
+                    "types",
+                    "value"
+                ]
+            }
+        },
+        "status": {
+            "type": "string",
+            "default": "active",
+            "enum": [
+                "active",
+                "inactive",
+                "withdrawn"
+            ]
+        }
+    },
+    "definitions": {
+        "non-empty-string": {
+            "type": "string",
+            "minLength": 1
+        }
+    },
+    "required": [
+        "admin",
+        "id",
+        "locations",
+        "names",
+        "status",
+        "types"
+    ]
+}
