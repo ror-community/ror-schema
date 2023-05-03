@@ -58,13 +58,67 @@
         },
         "domains": {
             "type": "array",
+            "uniqueItems": true,
             "default": [],
             "items": {
-                "$ref": "#/$defs/non-empty-string"
+                "type": "string",
+                "pattern": "^((?=[a-z0-9-]{1,63}\.)[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}$"
             }
+        },
+        "established": {
+            "type": [
+                "null",
+                "number"
+            ],
+            "default": null
+        },
+        "external_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "default": [],
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "all": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "default": [],
+                        "items": {
+                            "$ref": "#/$defs/non-empty-string"
+                        }
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "fundref",
+                            "grid",
+                            "isni",
+                            "wikidata"
+                        ]
+                    },
+                    "preferred": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "all",
+                    "type"
+                ]
+            }
+        },
+        "id": {
+            "type": "string",
+            "default": "https://ror.org/012xzy7a9",
+            "pattern": "^https://ror.org/0[a-z|0-9]{8}$",
+            "readOnly": true
         },
         "links": {
             "type": "array",
+            "uniqueItems": true,
             "default": [],
             "items": {
                 "type": "object",
@@ -90,6 +144,7 @@
         },
         "locations": {
             "type": "array",
+            "uniqueItems": true,
             "default": [],
             "minItems": 1,
             "items": {
@@ -130,6 +185,7 @@
                                     "string",
                                     "null"
                                 ],
+                                "pattern": "^[A-Z]{2}$",
                                 "minLength": 2,
                                 "maxLength": 2
                             },
@@ -144,14 +200,56 @@
                 }
             }
         },
+        "names": {
+            "type": "array",
+            "uniqueItems": true,
+            "default": [],
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "value": {
+                        "$ref": "#/$defs/non-empty-string"
+                    },
+                    "types": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "default": [],
+                        "minItems": 1,
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "acronym",
+                                "alias",
+                                "label",
+                                "ror_display"
+                            ]
+                        }
+                    },
+                    "lang": {
+                        "type": "string",
+                        "pattern": "^[a-z]{2}$",
+                        "minLength": 2,
+                        "maxLength": 2
+                    }
+                },
+                "required": [
+                    "types",
+                    "value"
+                ]
+            }
+        },
         "types": {
             "type": "array",
+            "uniqueItems": true,
             "minItems": 1,
             "default": [],
             "items": {
                 "type": "string",
                 "enum": [
                     "education",
+                    "funder",
                     "healthcare",
                     "company",
                     "archive",
@@ -162,51 +260,9 @@
                 ]
             }
         },
-        "external_ids": {
-            "type": "array",
-            "default": [],
-            "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                    "all": {
-                        "type": "array",
-                        "default": [],
-                        "items": {
-                            "$ref": "#/$defs/non-empty-string"
-                        }
-                    },
-                    "type": {
-                        "type": "string",
-                        "enum": [
-                            "fundref",
-                            "grid",
-                            "isni",
-                            "wikidata"
-                        ]
-                    },
-                    "preferred": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
-                    }
-                },
-                "required": [
-                    "all",
-                    "type"
-                ]
-            }
-        },
-        "established": {
-            "type": [
-                "null",
-                "number"
-            ],
-            "default": null
-        },
         "relationships": {
             "type": "array",
+            "uniqueItems": true,
             "default": [],
             "items": {
                 "type": "object",
@@ -234,49 +290,6 @@
                     "id",
                     "label",
                     "type"
-                ]
-            }
-        },
-        "id": {
-            "type": "string",
-            "default": "https://ror.org/012xzy7a9",
-            "pattern": "^https://ror.org/0[a-z|0-9]{8}$",
-            "readOnly": true
-        },
-        "names": {
-            "type": "array",
-            "default": [],
-            "minItems": 1,
-            "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                    "value": {
-                        "$ref": "#/$defs/non-empty-string"
-                    },
-                    "types": {
-                        "type": "array",
-                        "default": [],
-                        "minItems": 1,
-                        "items": {
-                            "type": "string",
-                            "enum": [
-                                "acronym",
-                                "alias",
-                                "label",
-                                "ror_display"
-                            ]
-                        }
-                    },
-                    "lang": {
-                        "type": "string",
-                        "minLength": 2,
-                        "maxLength": 2
-                    }
-                },
-                "required": [
-                    "types",
-                    "value"
                 ]
             }
         },
