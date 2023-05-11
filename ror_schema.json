@@ -284,6 +284,7 @@
     },
     "types": {
       "type": "array",
+      "minItems": 1,
       "default": [],
       "description": "Institutional Types",
       "items": {
