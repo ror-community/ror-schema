@@ -228,7 +228,10 @@
                         }
                     },
                     "lang": {
-                        "type": "string",
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "pattern": "^[a-z]{2}$",
                         "minLength": 2,
                         "maxLength": 2
