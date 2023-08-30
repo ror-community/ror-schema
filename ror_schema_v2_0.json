@@ -243,26 +243,6 @@
                 ]
             }
         },
-        "types": {
-            "type": "array",
-            "uniqueItems": true,
-            "minItems": 1,
-            "default": [],
-            "items": {
-                "type": "string",
-                "enum": [
-                    "education",
-                    "funder",
-                    "healthcare",
-                    "company",
-                    "archive",
-                    "nonprofit",
-                    "government",
-                    "facility",
-                    "other"
-                ]
-            }
-        },
         "relationships": {
             "type": "array",
             "uniqueItems": true,
@@ -304,6 +284,26 @@
                 "inactive",
                 "withdrawn"
             ]
+        },
+        "types": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "default": [],
+            "items": {
+                "type": "string",
+                "enum": [
+                    "education",
+                    "funder",
+                    "healthcare",
+                    "company",
+                    "archive",
+                    "nonprofit",
+                    "government",
+                    "facility",
+                    "other"
+                ]
+            }
         }
     },
     "$defs": {
