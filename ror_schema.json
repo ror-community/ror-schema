@@ -44,16 +44,21 @@
           "readOnly": true
         }
       },
-      "required": ["country_code", "country_name"]
+      "required": [
+        "country_code",
+        "country_name"
+      ]
     },
     "name": {
       "$ref": "#/definitions/non-empty-string",
       "default": ""
     },
     "wikipedia_url": {
-      "type": ["null","string"],
+      "type": [
+        "null",
+        "string"
+      ],
       "default": null
-
     },
     "addresses": {
       "type": "array",
@@ -109,22 +114,34 @@
                 "properties": {
                   "ascii_name": {
                     "readOnly": true,
-                    "type": ["string","null"],
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "default": null
                   },
                   "name": {
                     "readOnly": true,
-                    "type": ["string","null"],
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "default": null
                   },
                   "id": {
                     "readOnly": true,
-                    "type": ["integer","null"],
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
                     "default": null
                   },
                   "code": {
                     "readOnly": true,
-                    "type": ["string","null"],
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "default": null
                   }
                 }
@@ -135,22 +152,34 @@
                 "properties": {
                   "ascii_name": {
                     "readOnly": true,
-                    "type": ["string","null"],
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "default": null
                   },
                   "name": {
                     "readOnly": true,
-                    "type": ["string","null"],
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "default": null
                   },
                   "id": {
                     "readOnly": true,
-                    "type": ["integer","null"],
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
                     "default": null
                   },
                   "code": {
                     "readOnly": true,
-                    "type": ["string","null"],
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "default": null
                   }
                 }
@@ -325,7 +354,10 @@
                 "string"
               ]
             }
-          }
+          },
+          "required": [
+            "all"
+          ]
         },
         "ISNI": {
           "type": "object",
@@ -345,7 +377,10 @@
                 "type": "string"
               }
             }
-          }
+          },
+          "required": [
+            "all"
+          ]
         },
         "FundRef": {
           "type": "object",
@@ -365,7 +400,10 @@
                 "type": "string"
               }
             }
-          }
+          },
+          "required": [
+            "all"
+          ]
         },
         "Wikidata": {
           "type": "object",
@@ -385,12 +423,18 @@
                 "type": "string"
               }
             }
-          }
+          },
+          "required": [
+            "all"
+          ]
         }
       }
     },
     "established": {
-      "type": ["null", "number"],
+      "type": [
+        "null",
+        "number"
+      ],
       "default": null
     },
     "relationships": {
@@ -402,7 +446,13 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["Related", "Parent", "Child", "Successor", "Predecessor"]
+            "enum": [
+              "Related",
+              "Parent",
+              "Child",
+              "Successor",
+              "Predecessor"
+            ]
           },
           "id": {
             "type": "string",
@@ -412,11 +462,18 @@
             "$ref": "#/definitions/non-empty-string"
           }
         },
-        "required": ["id", "label", "type"]
+        "required": [
+          "id",
+          "label",
+          "type"
+        ]
       }
     },
     "email_address": {
-      "type": ["null", "string"],
+      "type": [
+        "null",
+        "string"
+      ],
       "default": null
     },
     "id": {
@@ -440,13 +497,20 @@
             "maxLength": 2
           }
         },
-        "required": ["label", "iso639"]
+        "required": [
+          "label",
+          "iso639"
+        ]
       }
     },
     "status": {
       "type": "string",
       "default": "active",
-      "enum": ["active", "inactive", "withdrawn"]
+      "enum": [
+        "active",
+        "inactive",
+        "withdrawn"
+      ]
     }
   },
   "definitions": {
@@ -455,5 +519,10 @@
       "minLength": 1
     }
   },
-  "required": ["name", "types", "addresses", "status"]
+  "required": [
+    "name",
+    "types",
+    "addresses",
+    "status"
+  ]
 }
