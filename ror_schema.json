@@ -287,7 +287,10 @@
             "default": null
           },
           "country_geonames_id": {
-            "type": "integer",
+            "type": [
+              "null",
+              "integer"
+            ],
             "readOnly": true
           },
           "primary": {
