@@ -125,8 +125,7 @@
                 "additionalProperties": false,
                 "properties": {
                     "value": {
-                        "type": "string",
-                        "format": "uri"
+                        "type": "string"
                     },
                     "type": {
                         "type": "string",
