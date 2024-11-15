@@ -231,7 +231,7 @@
                                     "string",
                                     "null"
                                 ],
-                                "pattern": "^[A-Z]{1,3}$",
+                                "pattern": "^[A-Z0-9]{1,3}$",
                                 "minLength": 1,
                                 "maxLength": 3
                             },
