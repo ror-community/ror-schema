@@ -329,6 +329,7 @@
           "Nonprofit",
           "Government",
           "Facility",
+          "Funder",
           "Other"
         ]
       }
@@ -495,7 +496,10 @@
             "type": "string"
           },
           "iso639": {
-            "type": "string",
+            "type": [
+                "null",
+                "string"
+            ],
             "minLength": 2,
             "maxLength": 2
           }
